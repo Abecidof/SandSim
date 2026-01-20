@@ -156,6 +156,7 @@ public sealed class SandSim : MonoBehaviour
     private bool _dirtyAny;
     private int _dirtyMinX, _dirtyMaxX, _dirtyMinY, _dirtyMaxY;
 
+
     private void Awake()
     {
         _rng = new System.Random(Environment.TickCount);
@@ -454,6 +455,9 @@ public sealed class SandSim : MonoBehaviour
         }
     }
 
+    // -----------------------------
+    // Improved liquid pooling/spread
+    // -----------------------------
     private void UpdateLiquid(int x, int y, int idx, CellType t, Props p)
     {
         int belowY = y - 1;
@@ -461,44 +465,202 @@ public sealed class SandSim : MonoBehaviour
         {
             if (TryMoveDensity(x, y, x, belowY, t, p)) return;
 
-            int dir = RandDir();
-            if (TryMoveDensity(x, y, x + dir, belowY, t, p)) return;
-            if (TryMoveDensity(x, y, x - dir, belowY, t, p)) return;
+            int dirFall = RandDir();
+            if (TryMoveDensity(x, y, x + dirFall, belowY, t, p)) return;
+            if (TryMoveDensity(x, y, x - dirFall, belowY, t, p)) return;
         }
 
-        // Sideways flow: flowSpread applied once
-        int baseDisp = Mathf.Max(1, p.Dispersion);
-        float viscFactor = 1f - (p.Viscosity / 255f);
-        int effectiveAttempts = Mathf.Max(1, Mathf.RoundToInt(
-            baseDisp * Mathf.Lerp(0.25f, 1f, viscFactor) * flowSpread
-        ));
+        // Lateral: choose the better side (pool on support, spill into drops),
+        // and respect viscosity + flowSpread without excessive repeated attempts.
+        float visc01 = p.Viscosity / 255f;            // 0 = runny, 1 = very viscous
+        float runny01 = 1f - visc01;
 
-        int sideDir = RandDir();
-        for (int i = 0; i < effectiveAttempts; i++)
+        // How often does this liquid even attempt lateral equalization?
+        float lateralChance = Mathf.Clamp01(0.18f + runny01 * 0.65f) * Mathf.Clamp01(flowSpread / 1.25f);
+        if (_rng.NextDouble() > lateralChance) return;
+
+        int dir = RandDir();
+        int aX = x + dir;
+        int bX = x - dir;
+
+        bool aOk = EvaluateLiquidLateralTarget(aX, y, p, out int aScore);
+        bool bOk = EvaluateLiquidLateralTarget(bX, y, p, out int bScore);
+
+        if (!aOk && !bOk) return;
+
+        // Slight randomness to prevent lock-step flow patterns.
+        // (No allocations; just integer noise.)
+        aScore += _rng.Next(0, 2);
+        bScore += _rng.Next(0, 2);
+
+        // Prefer higher score; if tie, prefer randomized 'dir' side.
+        if (aOk && (!bOk || aScore >= bScore))
         {
-            if (TryMoveDensity(x, y, x + sideDir, y, t, p)) return;
-            if (TryMoveDensity(x, y, x - sideDir, y, t, p)) return;
+            if (TryMoveDensity(x, y, aX, y, t, p)) return;
+            if (bOk) TryMoveDensity(x, y, bX, y, t, p);
+            return;
+        }
+
+        if (bOk)
+        {
+            if (TryMoveDensity(x, y, bX, y, t, p)) return;
+            if (aOk) TryMoveDensity(x, y, aX, y, t, p);
         }
     }
 
+    // Score a lateral target for a liquid.
+    // Higher is better. Intentionally cheap (small constant work).
+    private bool EvaluateLiquidLateralTarget(int toX, int y, Props movingProps, out int score)
+    {
+        score = int.MinValue;
+
+        if ((uint)toX >= (uint)width) return false;
+
+        int toIdx = Index(toX, y);
+
+        // If the target cell is already updated this stamp, avoid choosing it.
+        if (IsUpdated(toIdx)) return false;
+
+        CellType destType = _cells[toIdx];
+
+        // Determine if we can enter (empty) or swap (less dense, non-solid).
+        bool canEnter = false;
+        bool destEmpty = destType == CellType.Empty;
+
+        if (destEmpty)
+        {
+            canEnter = true;
+        }
+        else
+        {
+            Props destProps = _props[(int)destType];
+            if (destProps.State != State.Solid && movingProps.Density > destProps.Density)
+                canEnter = true;
+        }
+
+        if (!canEnter) return false;
+
+        // Pooling preference: supported targets are better when there is no obvious drop.
+        bool supported = (y == 0) || (_cells[Index(toX, y - 1)] != CellType.Empty);
+
+        // Spill preference: if there is space below target, prefer moving toward deeper drops.
+        // Keep this scan short to maintain perf.
+        int drop = (y == 0) ? 0 : DropDistanceBelow(toX, y, maxDepth: 4);
+
+        // Scoring:
+        // - Drops matter a lot (spill into cavities / off ledges).
+        // - Otherwise prefer supported lateral spread (pooling on surfaces).
+        // - Slight bonus for moving into empty (reduces oscillation vs swapping).
+        score = drop * 6;
+        if (drop == 0 && supported) score += 3;
+        if (destEmpty) score += 1;
+
+        return true;
+    }
+
+    // Count how many consecutive empty cells are below (toX, y-1), up to maxDepth.
+    private int DropDistanceBelow(int toX, int y, int maxDepth)
+    {
+        int d = 0;
+        for (int yy = y - 1; yy >= 0 && d < maxDepth; yy--)
+        {
+            if (_cells[Index(toX, yy)] != CellType.Empty) break;
+            d++;
+        }
+        return d;
+    }
+
+    // -----------------------------
+    // Improved gas drift / diffusion
+    // -----------------------------
     private void UpdateGas(int x, int y, int idx, CellType t, Props p)
     {
         int aboveY = y + 1;
         if (aboveY >= height) return;
 
-        if (TryMoveDensityUp(x, y, x, aboveY, t, p)) return;
-
         int dir = RandDir();
+
+        // Gas meander: occasionally drift sideways even if it could rise.
+        // Smoke meanders a bit more than steam (visually pleasing).
+        float meanderChance = (t == CellType.Smoke ? 0.28f : 0.18f) * Mathf.Clamp01(flowSpread / 1.25f);
+
+        // If blocked directly above, we prefer to slide sideways under ceilings sooner.
+        bool aboveBlocked = !CanGasEnter(x, y, x, aboveY, p);
+
+        if (!aboveBlocked && _rng.NextDouble() < meanderChance)
+        {
+            // Try a lateral gas-side move first (only into empty or heavier gas).
+            if (TryMoveGasSide(x, y, x + dir, y, t, p)) return;
+            if (TryMoveGasSide(x, y, x - dir, y, t, p)) return;
+        }
+
+        // Standard buoyant rise / diagonal rise.
+        if (TryMoveDensityUp(x, y, x, aboveY, t, p)) return;
         if (TryMoveDensityUp(x, y, x + dir, aboveY, t, p)) return;
         if (TryMoveDensityUp(x, y, x - dir, aboveY, t, p)) return;
 
-        int attempts = Mathf.Max(1, Mathf.RoundToInt(p.Dispersion * flowSpread));
-        int sideDir = RandDir();
-        for (int i = 0; i < attempts; i++)
+        // If we couldn't rise, drift sideways (ceiling-hug / diffusion).
+        if (TryMoveGasSide(x, y, x + dir, y, t, p)) return;
+        if (TryMoveGasSide(x, y, x - dir, y, t, p)) return;
+
+        // Rarely, allow a tiny downward “eddy” to prevent trapped gas from becoming static.
+        // Keep extremely low to avoid smoke “falling.”
+        if (_rng.NextDouble() < 0.03)
         {
-            if (TryMoveIntoEmpty(x, y, x + sideDir, y, t)) return;
-            if (TryMoveIntoEmpty(x, y, x - sideDir, y, t)) return;
+            int downY = y - 1;
+            if (downY >= 0)
+            {
+                if (TryMoveIntoEmpty(x, y, x + dir, downY, t)) return;
+                if (TryMoveIntoEmpty(x, y, x - dir, downY, t)) return;
+            }
         }
+    }
+
+    // Can gas enter a target cell for upward movement? (Used only for 'aboveBlocked' heuristic.)
+    private bool CanGasEnter(int fromX, int fromY, int toX, int toY, Props gasProps)
+    {
+        if ((uint)toX >= (uint)width || (uint)toY >= (uint)height) return false;
+
+        int fromIdx = Index(fromX, fromY);
+        int toIdx = Index(toX, toY);
+
+        if (IsUpdated(fromIdx) || IsUpdated(toIdx)) return false;
+
+        CellType destType = _cells[toIdx];
+        if (destType == CellType.Empty) return true;
+
+        Props destProps = _props[(int)destType];
+        if (destProps.State == State.Solid || destProps.State == State.Powder) return false;
+
+        return gasProps.Density < destProps.Density;
+    }
+
+    // Lateral movement for gases: only into empty OR swap with heavier gas.
+    // This avoids sideways shoving into liquids, which looks like smearing.
+    private bool TryMoveGasSide(int fromX, int fromY, int toX, int toY, CellType gasType, Props gasProps)
+    {
+        if ((uint)toX >= (uint)width || (uint)toY >= (uint)height) return false;
+
+        int fromIdx = Index(fromX, fromY);
+        int toIdx = Index(toX, toY);
+
+        if (IsUpdated(fromIdx) || IsUpdated(toIdx)) return false;
+
+        CellType destType = _cells[toIdx];
+
+        if (destType == CellType.Empty)
+            return DoSwap(fromX, fromY, toX, toY, fromIdx, toIdx);
+
+        Props destProps = _props[(int)destType];
+
+        // Only allow lateral swapping among gases (lets steam sift above smoke),
+        // but do not laterally displace liquids/powders.
+        if (destProps.State != State.Gas) return false;
+
+        if (gasProps.Density < destProps.Density)
+            return DoSwap(fromX, fromY, toX, toY, fromIdx, toIdx);
+
+        return false;
     }
 
     private void UpdateFire(int x, int y, int idx)
@@ -964,6 +1126,7 @@ public sealed class SandSim : MonoBehaviour
             _dirtyBuffer = new Color32[needed];
 
         // Pack region into contiguous buffer for SetPixels32
+        // IMPORTANT: keep row-contiguous packing to avoid streak artifacts.
         for (int row = 0; row < h; row++)
         {
             int src = minX + (minY + row) * width;

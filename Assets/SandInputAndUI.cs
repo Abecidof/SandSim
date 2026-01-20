@@ -18,6 +18,7 @@ public sealed class SandInputAndUI : MonoBehaviour
     [SerializeField] private Slider stepsPerFrameSlider;
     [SerializeField] private Toggle pauseToggle;
     [SerializeField] private Button clearButton;
+    [SerializeField] private Button closeButton;
 
     [Header("Optional Labels (TMP)")]
     [SerializeField] private TMP_Text brushSizeLabel;
@@ -26,24 +27,21 @@ public sealed class SandInputAndUI : MonoBehaviour
     [SerializeField] private Slider gravitySlider;
     [SerializeField] private TMP_Text gravityLabel;
 
-
-
     private readonly List<SandSim.CellType> _materials = new()
-{
-    SandSim.CellType.Sand,
-    SandSim.CellType.Water,
-    SandSim.CellType.Oil,
-    SandSim.CellType.Acid,
-    SandSim.CellType.Lava,
-    SandSim.CellType.Stone,
-    SandSim.CellType.Wood,
-    SandSim.CellType.Plant,
-    SandSim.CellType.Fire,
-    SandSim.CellType.Steam,
-    SandSim.CellType.Smoke,
-    SandSim.CellType.Empty // eraser
-};
-
+    {
+        SandSim.CellType.Sand,
+        SandSim.CellType.Water,
+        SandSim.CellType.Oil,
+        SandSim.CellType.Acid,
+        SandSim.CellType.Lava,
+        SandSim.CellType.Stone,
+        SandSim.CellType.Wood,
+        SandSim.CellType.Plant,
+        SandSim.CellType.Fire,
+        SandSim.CellType.Steam,
+        SandSim.CellType.Smoke,
+        SandSim.CellType.Empty // eraser
+    };
 
     private Camera _uiCam;
 
@@ -126,7 +124,6 @@ public sealed class SandInputAndUI : MonoBehaviour
             "Eraser"
         });
 
-
         materialDropdown.onValueChanged.AddListener(i =>
         {
             sim.PaintType = _materials[Mathf.Clamp(i, 0, _materials.Count - 1)];
@@ -166,6 +163,19 @@ public sealed class SandInputAndUI : MonoBehaviour
                 sim.Paused = isOn;
             });
         }
+
+        // FlowSpread slider (was previously not wired)
+        if (gravitySlider != null)
+        {
+            gravitySlider.minValue = 0.25f;
+            gravitySlider.maxValue = 3f;
+            gravitySlider.wholeNumbers = false;
+            gravitySlider.onValueChanged.AddListener(v =>
+            {
+                sim.FlowSpread = v;
+                UpdateLabels();
+            });
+        }
     }
 
     private void SetupButtons()
@@ -174,6 +184,17 @@ public sealed class SandInputAndUI : MonoBehaviour
         {
             clearButton.onClick.AddListener(() => sim.Clear());
         }
+
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(() => QuitGame());
+        }
+    }
+
+
+    private void QuitGame()
+    {
+        Application.Quit();
     }
 
     private void SyncUIToSim()
@@ -192,6 +213,5 @@ public sealed class SandInputAndUI : MonoBehaviour
         if (brushSizeLabel != null) brushSizeLabel.text = $"Brush: {sim.BrushRadius}";
         if (stepsLabel != null) stepsLabel.text = $"Steps/Frame: {sim.StepsPerFrame}";
         if (gravityLabel != null) gravityLabel.text = $"Flow Spread: {sim.FlowSpread:0.00}";
-
     }
 }

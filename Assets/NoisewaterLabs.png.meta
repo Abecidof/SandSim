@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: bba17fadcf15a7a4fb55cd2549ce194b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2656170581327616692
+    second: NoisewaterLabs_0
+  - first:
+      213: -5727173411656501085
+    second: NoisewaterLabs_1
+  - first:
+      213: 3315011435231716050
+    second: NoisewaterLabs_2
+  - first:
+      213: 591815449866083649
+    second: NoisewaterLabs_3
+  - first:
+      213: -5540058145019761270
+    second: NoisewaterLabs_4
+  - first:
+      213: 3654770424730318686
+    second: NoisewaterLabs_5
+  - first:
+      213: -5249612685428380310
+    second: NoisewaterLabs_6
+  - first:
+      213: -398713621765616798
+    second: NoisewaterLabs_7
+  - first:
+      213: -862116681316305986
+    second: NoisewaterLabs_8
+  - first:
+      213: 6461275995270217048
+    second: NoisewaterLabs_9
+  - first:
+      213: -7918167259538897789
+    second: NoisewaterLabs_10
+  - first:
+      213: -8068399179900413045
+    second: NoisewaterLabs_11
+  - first:
+      213: 6287011802836260009
+    second: NoisewaterLabs_12
+  - first:
+      213: -2294657154756182601
+    second: NoisewaterLabs_13
+  - first:
+      213: -3590984757126068035
+    second: NoisewaterLabs_14
+  - first:
+      213: 8902764306661416240
+    second: NoisewaterLabs_15
+  - first:
+      213: -6493261414490850373
+    second: NoisewaterLabs_16
+  - first:
+      213: 8943086534021840802
+    second: NoisewaterLabs_17
+  - first:
+      213: -8252578709305477514
+    second: NoisewaterLabs_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: NoisewaterLabs_0
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 698
+        width: 182
+        height: 321
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c45ef15ede2632bd0800000000000000
+      internalID: -2656170581327616692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_1
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 495
+        width: 283
+        height: 428
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a8f62f302ef480b0800000000000000
+      internalID: -5727173411656501085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_2
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 665
+        width: 25
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d2285f2659410e20800000000000000
+      internalID: 3315011435231716050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_3
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 657
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14d1bdd140d863800800000000000000
+      internalID: 591815449866083649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_4
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 88
+        width: 462
+        height: 558
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8d66173872cd13b0800000000000000
+      internalID: -5540058145019761270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_5
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 495
+        width: 68
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5777a5665a58b230800000000000000
+      internalID: 3654770424730318686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_6
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 495
+        width: 65
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6d28a48311a527b0800000000000000
+      internalID: -5249612685428380310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_7
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 561
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26b0d8fc21c777af0800000000000000
+      internalID: -398713621765616798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_8
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 495
+        width: 25
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb3f33f22752904f0800000000000000
+      internalID: -862116681316305986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_9
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 495
+        width: 52
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85df6ddc8401ba950800000000000000
+      internalID: 6461275995270217048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_10
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 495
+        width: 59
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3844e0764d40d1290800000000000000
+      internalID: -7918167259538897789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_11
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 495
+        width: 93
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8b9bffa1b9470090800000000000000
+      internalID: -8068399179900413045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_12
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 495
+        width: 65
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a45eb6bce3ff3750800000000000000
+      internalID: 6287011802836260009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_13
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 495
+        width: 46
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bdf271b97db720e0800000000000000
+      internalID: -2294657154756182601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_14
+      rect:
+        serializedVersion: 2
+        x: 824
+        y: 495
+        width: 62
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db888a5a3624a2ec0800000000000000
+      internalID: -3590984757126068035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_15
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 391
+        width: 53
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03d9491d7f8fc8b70800000000000000
+      internalID: 8902764306661416240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_16
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 389
+        width: 58
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbbb583752d43e5a0800000000000000
+      internalID: -6493261414490850373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_17
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 388
+        width: 60
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2af73f7f1d93c1c70800000000000000
+      internalID: 8943086534021840802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoisewaterLabs_18
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 48
+        width: 243
+        height: 408
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67635ee4363f87d80800000000000000
+      internalID: -8252578709305477514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      NoisewaterLabs_0: -2656170581327616692
+      NoisewaterLabs_1: -5727173411656501085
+      NoisewaterLabs_10: -7918167259538897789
+      NoisewaterLabs_11: -8068399179900413045
+      NoisewaterLabs_12: 6287011802836260009
+      NoisewaterLabs_13: -2294657154756182601
+      NoisewaterLabs_14: -3590984757126068035
+      NoisewaterLabs_15: 8902764306661416240
+      NoisewaterLabs_16: -6493261414490850373
+      NoisewaterLabs_17: 8943086534021840802
+      NoisewaterLabs_18: -8252578709305477514
+      NoisewaterLabs_2: 3315011435231716050
+      NoisewaterLabs_3: 591815449866083649
+      NoisewaterLabs_4: -5540058145019761270
+      NoisewaterLabs_5: 3654770424730318686
+      NoisewaterLabs_6: -5249612685428380310
+      NoisewaterLabs_7: -398713621765616798
+      NoisewaterLabs_8: -862116681316305986
+      NoisewaterLabs_9: 6461275995270217048
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
