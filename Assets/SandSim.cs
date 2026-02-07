@@ -448,11 +448,12 @@ public sealed class SandSim : MonoBehaviour
         if (TryMoveDensity(x, y, x + dir, belowY, t, p)) return;
         if (TryMoveDensity(x, y, x - dir, belowY, t, p)) return;
 
-        if (_rng.NextDouble() < 0.15)
+        //Commented out to try to remove sand heap slumping to flat
+        /*if (_rng.NextDouble() < 0.15)
         {
             if (TryMoveIntoEmpty(x, y, x + dir, y, t)) return;
             if (TryMoveIntoEmpty(x, y, x - dir, y, t)) return;
-        }
+        }*/
     }
 
     // -----------------------------
@@ -677,7 +678,7 @@ public sealed class SandSim : MonoBehaviour
 
         int dir = RandDir();
         int aboveY = y + 1;
-        if (aboveY < height)
+        if (aboveY < height && _rng.NextDouble() < 0.1)//added stochastic skip to slow fire relative to emitted smoke. Should remove horizontal smoke line artifact.
         {
             if (TryMoveFire(x, y, x, aboveY)) return;
             if (TryMoveFire(x, y, x + dir, aboveY)) return;
