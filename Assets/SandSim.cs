@@ -448,12 +448,12 @@ public sealed class SandSim : MonoBehaviour
         if (TryMoveDensity(x, y, x + dir, belowY, t, p)) return;
         if (TryMoveDensity(x, y, x - dir, belowY, t, p)) return;
 
-        //Commented out to try to remove sand heap slumping to flat
-        /*if (_rng.NextDouble() < 0.15)
+        //Corrected sand behavior
+        if (_rng.NextDouble() < 0.15)
         {
-            if (TryMoveIntoEmpty(x, y, x + dir, y, t)) return;
-            if (TryMoveIntoEmpty(x, y, x - dir, y, t)) return;
-        }*/
+            if (TryMoveIntoEmpty(x, y, x + dir, y-1, t)) return;
+            if (TryMoveIntoEmpty(x, y, x - dir, y-1, t)) return;
+        }
     }
 
     // -----------------------------
