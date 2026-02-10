@@ -451,14 +451,17 @@ public sealed class SandSim : MonoBehaviour
         //Corrected sand behavior
         if (_rng.NextDouble() < 0.15)
         {
-            if (TryMoveIntoEmpty(x, y, x + dir, y-1, t)) return;
-            if (TryMoveIntoEmpty(x, y, x - dir, y-1, t)) return;
+            if (TryMoveIntoEmpty(x, y, x + dir, belowY, t)) return;
+            if (TryMoveIntoEmpty(x, y, x - dir, belowY, t)) return;
         }
     }
 
     // -----------------------------
     // Improved liquid pooling/spread
     // -----------------------------
+
+    //Ian thinks this is way too complicated and could be done in 1/4 the lines.
+    //Use the same form as UpdatePowder I(an) say(s), with a marginal flourish.
     private void UpdateLiquid(int x, int y, int idx, CellType t, Props p)
     {
         int belowY = y - 1;
@@ -574,6 +577,8 @@ public sealed class SandSim : MonoBehaviour
     // -----------------------------
     // Improved gas drift / diffusion
     // -----------------------------
+
+    //Also judged as needlessly overcomplicated by Ian. Simplifying may make snoke look better.
     private void UpdateGas(int x, int y, int idx, CellType t, Props p)
     {
         int aboveY = y + 1;
