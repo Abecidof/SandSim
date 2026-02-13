@@ -455,112 +455,28 @@ public sealed class SandSim : MonoBehaviour
             if (TryMoveIntoEmpty(x, y, x - dir, belowY, t)) return;
         }
     }
-
-    // -----------------------------
-    // Improved liquid pooling/spread
-    // -----------------------------
-
-    //Ian thinks this is way too complicated and could be done in 1/4 the lines.
+    
+    //Ian thinks this was way too complicated and could be done in 1/4 the lines.
     //Use the same form as UpdatePowder I(an) say(s), with a marginal flourish.
+    //Update created some dead code.
     private void UpdateLiquid(int x, int y, int idx, CellType t, Props p)
     {
         int belowY = y - 1;
-        if (belowY >= 0)
-        {
-            if (TryMoveDensity(x, y, x, belowY, t, p)) return;
-
-            int dirFall = RandDir();
-            if (TryMoveDensity(x, y, x + dirFall, belowY, t, p)) return;
-            if (TryMoveDensity(x, y, x - dirFall, belowY, t, p)) return;
-        }
-
-        // Lateral: choose the better side (pool on support, spill into drops),
-        // and respect viscosity + flowSpread without excessive repeated attempts.
-        float visc01 = p.Viscosity / 255f;            // 0 = runny, 1 = very viscous
-        float runny01 = 1f - visc01;
-
-        // How often does this liquid even attempt lateral equalization?
-        float lateralChance = Mathf.Clamp01(0.18f + runny01 * 0.65f) * Mathf.Clamp01(flowSpread / 1.25f);
-        if (_rng.NextDouble() > lateralChance) return;
-
+        if (belowY < 0) return;
+        if (TryMoveDensity(x, y, x, belowY, t, p)) return;//gravity term
+        if (_rng.NextDouble() < p.Viscosity/255f) return;//Viscosity term. Slow liquid motion proportionally to normalized viscosity property by randomly returning early
         int dir = RandDir();
-        int aX = x + dir;
-        int bX = x - dir;
+        //try downward diagonally first
+        if (TryMoveDensity(x, y, x + dir, belowY, t, p)) return;
+        if (TryMoveDensity(x, y, x - dir, belowY, t, p)) return;
+        
+        if (TryMoveDensity(x, y, x + dir, y, t, p)) return;
+        if (TryMoveDensity(x, y, x - dir, y, t, p)) return;
 
-        bool aOk = EvaluateLiquidLateralTarget(aX, y, p, out int aScore);
-        bool bOk = EvaluateLiquidLateralTarget(bX, y, p, out int bScore);
-
-        if (!aOk && !bOk) return;
-
-        // Slight randomness to prevent lock-step flow patterns.
-        // (No allocations; just integer noise.)
-        aScore += _rng.Next(0, 2);
-        bScore += _rng.Next(0, 2);
-
-        // Prefer higher score; if tie, prefer randomized 'dir' side.
-        if (aOk && (!bOk || aScore >= bScore))
-        {
-            if (TryMoveDensity(x, y, aX, y, t, p)) return;
-            if (bOk) TryMoveDensity(x, y, bX, y, t, p);
-            return;
-        }
-
-        if (bOk)
-        {
-            if (TryMoveDensity(x, y, bX, y, t, p)) return;
-            if (aOk) TryMoveDensity(x, y, aX, y, t, p);
-        }
-    }
-
-    // Score a lateral target for a liquid.
-    // Higher is better. Intentionally cheap (small constant work).
-    private bool EvaluateLiquidLateralTarget(int toX, int y, Props movingProps, out int score)
-    {
-        score = int.MinValue;
-
-        if ((uint)toX >= (uint)width) return false;
-
-        int toIdx = Index(toX, y);
-
-        // If the target cell is already updated this stamp, avoid choosing it.
-        if (IsUpdated(toIdx)) return false;
-
-        CellType destType = _cells[toIdx];
-
-        // Determine if we can enter (empty) or swap (less dense, non-solid).
-        bool canEnter = false;
-        bool destEmpty = destType == CellType.Empty;
-
-        if (destEmpty)
-        {
-            canEnter = true;
-        }
-        else
-        {
-            Props destProps = _props[(int)destType];
-            if (destProps.State != State.Solid && movingProps.Density > destProps.Density)
-                canEnter = true;
-        }
-
-        if (!canEnter) return false;
-
-        // Pooling preference: supported targets are better when there is no obvious drop.
-        bool supported = (y == 0) || (_cells[Index(toX, y - 1)] != CellType.Empty);
-
-        // Spill preference: if there is space below target, prefer moving toward deeper drops.
-        // Keep this scan short to maintain perf.
-        int drop = (y == 0) ? 0 : DropDistanceBelow(toX, y, maxDepth: 4);
-
-        // Scoring:
-        // - Drops matter a lot (spill into cavities / off ledges).
-        // - Otherwise prefer supported lateral spread (pooling on surfaces).
-        // - Slight bonus for moving into empty (reduces oscillation vs swapping).
-        score = drop * 6;
-        if (drop == 0 && supported) score += 3;
-        if (destEmpty) score += 1;
-
-        return true;
-    }
+        
+        if (TryMoveIntoEmpty(x, y, x + dir, y, t)) return;
+        if (TryMoveIntoEmpty(x, y, x - dir, y, t)) return;
+    }//May need to update viscosity properties, though I believe this is functionally similar to the old version.
 
     // Count how many consecutive empty cells are below (toX, y-1), up to maxDepth.
     private int DropDistanceBelow(int toX, int y, int maxDepth)
